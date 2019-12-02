@@ -1,0 +1,29 @@
+#!/bin/bash - 
+
+#==============================================
+
+#sed for removing from spcific line
+#sudo sed -i '3 s/# deb/deb/' /etc/apt/sources.list.d/plexmediaserver.list
+
+
+#sed for removing all deb
+#sudo sed -i '/# deb/s/^#//g' /etc/apt/sources.list.d/plexmediaserver.list
+
+
+
+#=======================================
+
+
+#$ command -v plex >/dev/null 2>&1 || { echo >&2 "I require foo but it's not installed.  Aborting."; exit 1; }
+
+#if [ -d "/opt/Jackett2" ]; then
+
+#find /opt/ -name shit  &> /dev/null
+
+#dpkg-query -l 'radarr*' &> /dev/null
+
+
+
+#==========================================
+
+figlet Hello
