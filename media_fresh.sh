@@ -10,7 +10,7 @@
 #============================================================================
 
 clear
-echo Welcome to Baffo Installer, we will just get a few things ready.
+echo Welcome to Baffo v1.0 Installer, we will just get a few things ready.
 
 echo This installer is to convert your server to a media manager and mining machine.
 
