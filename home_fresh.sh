@@ -9,11 +9,29 @@
 #bash_version   :4.4.20(1)-release
 #============================================================================
 
-echo "OK Lets start, you selected Home"
+echo "Welcome to Wanatux Baffo PC Home Installer"
+echo "This will install the following software:"
+echo "Gimp, net-tools, Conky, Conky Manager, Gnome-tweak, wine, Atom, Real VNC, chrome-browser, Google driver"
+
+read -r -p "Do you want to continue? [Y/n] " input
+ 
+case $input in
+    [yY][eE][sS]|[yY])
+	
 sudo apt update
 sudo apt upgrade
+sudo ubuntu-drivers devices
+sudo ubuntu-drivers autoinstall
+dpkg-query -l 'nvidia*' &> /dev/null
 
-suddo apt install gimp net-tools conky-all gnome-tweak-tool
+if [ $? -eq 0 ]; then
+    sudo apt install nvidia-cuda-toolkit apt-transport-http mono-devel git-core 
+python python-setuptools tzdata 
+else
+    echo "Package  is NOT installed, not cuda needed!"
+fi
+
+sudo apt install gimp net-tools conky-all gnome-tweak-tool
 
 #Wine
 sudo dpkg --add-architecture i386 
@@ -45,7 +63,7 @@ gnome-control-center online-accounts
 
 
 #Dropbox
-sudo ./Software/dropbox.sh
+#sudo ./Software/dropbox.sh
 
 
 
@@ -54,7 +72,19 @@ sudo add-apt-repository ppa:mark-pcnetspec/conky-manager-pm9
 sudo apt update
 sudo apt-get install conky-manager
 #
-
+ ;;
+    [nN][oO]|[nN])
+ echo "Ok Please try when you are ready"
+echo "."
+echo "."
+echo "."
+echo "."
+       ;;
+    *)
+ echo "Invalid input..."
+ exit 1
+ ;;
+esac
 
 
 

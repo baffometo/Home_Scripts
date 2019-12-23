@@ -10,9 +10,9 @@
 #============================================================================
 
 clear
-echo Welcome to Baffo v1.0 Installer, we will just get a few things ready.
+echo Welcome to Wanatux v1.0 Installer, we will just get a few things ready.
 
-echo This installer is to convert your server to a media manager and mining machine.
+echo This installer will convert your server to a media center manager.
 
 read -r -p "Do you want to continue? [Y/n] " input
  

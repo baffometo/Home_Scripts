@@ -76,14 +76,24 @@ esac
 #Sonarr Desktop Icon
 cd ~/Downloads/
 wget https://www.dropbox.com/s/9p60wken45bjweu/256.png?dl=0 -O sonarrico
-sudo cp sonarrico ~/.icons
-echo "[Desktop Entry]
+if [ -d "~/.icons" ] 
+then
+    sudo mv sonarrico ~/.icons
+else
+    sudo mkdir -r ~/.icons
+	sudo mv sonarrico ~/.icons
+fi
+
+
+
+echo "#change [user]
+[Desktop Entry]
 Encoding=UTF-8
 Name=Sonarr
 Type=Link
 URL=http://localhost:8989/
-Icon=/home/baffometo/.icons/sonarrico" > ~/Desktop/sonarr.desktop
-
+Icon=/home/[user]/.icons/sonarrico" > ~/Desktop/sonarr.desktop
+sudo nano ~/Desktop/sonarr.desktop
 sudo systemctl enable sonarr.service
 
 

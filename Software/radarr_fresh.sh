@@ -1,7 +1,6 @@
 #!/bin/bash -  
 
-#Radarr 
- install
+#Radarr install
 sudo apt update && apt install curl mediainfo
 cd /opt
 curl -L -O $( curl -s https://api.github.com/repos/Radarr/Radarr/releases | grep linux.tar.gz | grep browser_download_url | head -1 | cut -d \" -f 4 )
@@ -48,7 +47,7 @@ Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target" > /lib/systemd/system/radarr.service
-
+sudo chown -R $user:$group /opt/Radarr 
  ;;
     [nN][oO]|[nN])
  echo "No"
@@ -91,13 +90,21 @@ esac
 
 cd ~/Downloads/
 wget  https://www.dropbox.com/s/4m6n98lxe19zaui/25025331.png?dl=0 -O radarrico
-sudo cp radarrico ~/.icons
-echo "[Desktop Entry]
+if [ -d "~/.icons" ] 
+then
+    sudo mv radarrico ~/.icons
+else
+    sudo mkdir -r ~/.icons
+	sudo mv radarrico ~/.icons
+fi
+
+echo "#Change [user]
+[Desktop Entry]
 Encoding=UTF-8
 Name=Radarr
 Type=Link
 URL=http://localhost:7878/
-Icon=/home/baffometo/.icons/radarrico" > ~/Desktop/radarr.desktop
-
+Icon=/home/[user]/.icons/radarrico" > ~/Desktop/radarr.desktop
+sudo nano ~/Desktop/radarr.desktop
 sudo systemctl enable radarr.service
 

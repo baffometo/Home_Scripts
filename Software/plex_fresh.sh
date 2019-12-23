@@ -7,14 +7,14 @@ sudo systemctl enable plexmediaserver.service
 
 cd /media
 mkdir server server2 server3 server4
-mkdir ~/.icons
+sudo mkdir ~/.icons
 
 cd ~/Downloads
-wget https://www.dropbox.com/s/un8n4rqacsof4dr/fstab2?dl=0 -O fstab
+#wget https://www.dropbox.com/s/un8n4rqacsof4dr/fstab2?dl=0 -O fstab
 wget https://www.dropbox.com/s/9aofju1eo1lxbfw/plex_icon.jpg?dl=0 -O plexico
 
-sudo cp fstab /etc/fstab
-sudo cp plexico ~/.icons
+#sudo cp fstab /etc/fstab
+sudo mv plexico ~/.icons
 
 sudo sed -i '3 s/# deb/deb/' /etc/apt/sources.list.d/plexmediaserver.list
 wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -
@@ -22,13 +22,15 @@ wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add
 sudo apt update
 sudo apt upgrade
 
-echo "[Desktop Entry]
+echo "#Please Change [user] to your user.
+[Desktop Entry]
 Encoding=UTF-8
 Name=PLex
 Type=Link
 URL=http://localhost:32400/
-Icon=/home/baffometo/.icons/plexico" > ~/Desktop/plex.desktop
+Icon=/home/[user}/.icons/plexico" > ~/Desktop/plex.desktop
 
+sudo nano ~/~/Desktop/plex.desktop
 
 sudo systemctl enable plexmediaserver.service
 sudo systemctl start plexmediaserver.service
