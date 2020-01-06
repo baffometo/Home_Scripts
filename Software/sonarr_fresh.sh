@@ -21,7 +21,7 @@ case $input in
     [yY][eE][sS]|[yY])
  echo "Yes"
 
-echo "Please Inser Username for Ssonarr"
+echo "Please Inser Username for Sonarr"
 
 read user
 
@@ -86,14 +86,13 @@ fi
 
 
 
-echo "#change [user]
-[Desktop Entry]
+echo "[Desktop Entry]
 Encoding=UTF-8
 Name=Sonarr
 Type=Link
 URL=http://localhost:8989/
-Icon=/home/[user]/.icons/sonarrico" > ~/Desktop/sonarr.desktop
-sudo nano ~/Desktop/sonarr.desktop
+Icon=/home/$user/.icons/sonarrico" > ~/Desktop/sonarr.desktop
+
 sudo systemctl enable sonarr.service
 
 
