@@ -42,62 +42,67 @@ else
     echo "Package  is NOT installed, not cuda needed!"
 fi
 
+cd /media
+mkdir server server2 server3 server4
+#sudo mkdir ~/.icons
+#wget https://www.dropbox.com/s/un8n4rqacsof4dr/fstab2?dl=0 -O fstab
+#sudo cp fstab /etc/fstab
 
 #================================================
 
 #Plex Installer
-dpkg-query -l 'plexmed*' &> /dev/null
+#dpkg-query -l 'plexmed*' &> /dev/null
 
-if [ $? -eq 0 ]; then
-    echo "Package  is installed!"
-else
+#if [ $? -eq 0 ]; then
+#    echo "Package  is installed!"
+#else
     sh ./software/plexfresh.sh
-fi
+#fi
 
 
 #===========================
 #Sonar Installer
 
-dpkg-query -l 'nzbdrone*' &> /dev/null
+# dpkg-query -l 'nzbdrone*' &> /dev/null
 
-if [ $? -eq 0 ]; then
-    echo "Package  is installed!"
-else
+# if [ $? -eq 0 ]; then
+#     echo "Package  is installed!"
+# else
     sh ./software/sonarr_fresh.sh
-fi
+# fi
 
 
 #=====================================
 #JAcket Installer
 
-if [ -d "/opt/Jackett" ]; then
-    echo "Package  is installed!"
-else
+# if [ -d "/opt/Jackett" ]; then
+#     echo "Package  is installed!"
+# else
     sh ./software/jackett.fresh.sh
-fi
+# fi
 
 #=====================================
 #Radarr Installer
 
 
-if [ -d "/opt/Radarr" ]; then
-    echo "Package  is installed!"
-else
+# if [ -d "/opt/Radarr" ]; then
+#     echo "Package  is installed!"
+# else
     sh ./software/jackett.fresh.sh
-fi
+#fi
 
 #=====================================
 
 #OMbi Installation
 
-dpkg-query -l 'ombi*' &> /dev/null
+# dpkg-query -l 'ombi*' &> /dev/null
 
-if [ $? -eq 0 ]; then
-    echo "Package  is installed!"
-else
+# if [ $? -eq 0 ]; then
+#     echo "Package  is installed!"
+# else
  sh ./software/ombi.fresh.sh
 
-fi
+#fi
 
 
 
