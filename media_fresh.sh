@@ -56,7 +56,7 @@ mkdir server server2 server3 server4
 #if [ $? -eq 0 ]; then
 #    echo "Package  is installed!"
 #else
-    sh ./software/plexfresh.sh
+    sh ./Software/plexfresh.sh
 #fi
 
 
@@ -68,7 +68,7 @@ mkdir server server2 server3 server4
 # if [ $? -eq 0 ]; then
 #     echo "Package  is installed!"
 # else
-    sh ./software/sonarr_fresh.sh
+    sh ./Software/sonarr_fresh.sh
 # fi
 
 
@@ -78,7 +78,7 @@ mkdir server server2 server3 server4
 # if [ -d "/opt/Jackett" ]; then
 #     echo "Package  is installed!"
 # else
-    sh ./software/jackett.fresh.sh
+    sh ./Software/jackett.fresh.sh
 # fi
 
 #=====================================
@@ -88,7 +88,7 @@ mkdir server server2 server3 server4
 # if [ -d "/opt/Radarr" ]; then
 #     echo "Package  is installed!"
 # else
-    sh ./software/jackett.fresh.sh
+    sh ./Software/jackett.fresh.sh
 #fi
 
 #=====================================
@@ -100,7 +100,7 @@ mkdir server server2 server3 server4
 # if [ $? -eq 0 ]; then
 #     echo "Package  is installed!"
 # else
- sh ./software/ombi.fresh.sh
+# sh ./Software/ombi.fresh.sh
 
 #fi
 
