@@ -2,8 +2,6 @@
 
 #JAckett INstallation
 
-
-
 sudo wget https://github.com/Jackett/Jackett/releases/download/v0.12.869/Jackett.Binaries.LinuxAMDx64.tar.gz -P /opt/
 sudo tar -xvzf /opt/Jackett.Binaries.LinuxAMDx64.tar.gz -C /opt/
 sudo /opt/Jackett/install_service_systemd.sh
@@ -15,18 +13,19 @@ if [ -d "~/.icons" ]
 then
     sudo mv Jackico ~/.icons
 else
-    sudo mkdir -r ~/.icons
+    sudo mkdir ~/.icons
 	sudo mv Jackico ~/.icons
 fi
 
-
+echo "PLease enter username for Desktop icon"
+read user
 
 echo "[Desktop Entry]
 Encoding=UTF-8
 Name=Jackett
 Type=Link
 URL=http://localhost:9117/
-Icon=/home/baffometo/.icons/Jackico" > ~/Desktop/jackett.desktop
+Icon=/home/$user/.icons/Jackico" > ~/Desktop/jackett.desktop
 
 sudo systemctl start jackett.service
 
