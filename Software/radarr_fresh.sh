@@ -13,7 +13,7 @@ case $input in
     [yY][eE][sS]|[yY])
  echo "Yes"
 
-echo "Please Inser Username for Ssonarr"
+echo "Please Inser Username for Radarr"
 
 read user
 
@@ -94,17 +94,15 @@ if [ -d "~/.icons" ]
 then
     sudo mv radarrico ~/.icons
 else
-    sudo mkdir -r ~/.icons
+    sudo mkdir ~/.icons
 	sudo mv radarrico ~/.icons
 fi
 
-echo "#Change [user]
-[Desktop Entry]
+echo "[Desktop Entry]
 Encoding=UTF-8
 Name=Radarr
 Type=Link
 URL=http://localhost:7878/
-Icon=/home/[user]/.icons/radarrico" > ~/Desktop/radarr.desktop
-sudo nano ~/Desktop/radarr.desktop
-sudo systemctl enable radarr.service
+Icon=/home/$user/.icons/radarrico" > ~/Desktop/radarr.desktop
 
+sudo systemctl enable radarr.service
