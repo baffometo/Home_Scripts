@@ -30,8 +30,8 @@ echo "."
 sudo apt update
 sudo apt upgrade 
 
-sudo ubuntu-drivers devices
-sudo ubuntu-drivers autoinstall
+#sudo ubuntu-drivers devices
+#sudo ubuntu-drivers autoinstall
 
 dpkg-query -l 'nvidia*' &> /dev/null
 
@@ -47,6 +47,7 @@ echo "Here we need to create some folders for the server HDDs"
 echo "It is not recommended to mount the HDDs in the default folder"
 echo "so we will create some folders in /media but we need to change the permissions first"
 echo "we dont want to have this folders under Root so please"
+clear
 echo "enter your username here"
 read user
 
@@ -55,11 +56,15 @@ echo "Now Enter group"
 read group
 
 cd /media
-sudo mkdir server server2 server3 server4
+sudo mkdir server server2 Movies Cartoon TV Abigail Anime
 sudo chown -R $user:$group /media/server
 sudo chown -R $user:$group /media/server2
-sudo chown -R $user:$group /media/server3
-sudo chown -R $user:$group /media/server4
+sudo chown -R $user:$group /media/Movies
+sudo chown -R $user:$group /media/Cartoon
+sudo chown -R $user:$group /media/TV
+sudo chown -R $user:$group /media/Abigail
+sudo chown -R $user:$group /media/Anime
+
 
 #sudo mkdir ~/.icons
 #wget https://www.dropbox.com/s/un8n4rqacsof4dr/fstab2?dl=0 -O fstab
@@ -68,11 +73,11 @@ sudo chown -R $user:$group /media/server4
 #================================================
 
 #Plex Installer
-wget https://downloads.plex.tv/plex-media-server-new/1.18.4.2171-ac2afe5f8/debian/plexmediaserver_1.18.4.2171-ac2afe5f8_amd64.deb -P ~/Downloads/
-sudo dpkg -i ~/Downloads/plexmediaserver*.deb
-sudo systemctl enable plexmediaserver.service
-sudo sed -i '3 s/# deb/deb/' /etc/apt/sources.list.d/plexmediaserver.list
-wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -
+#wget https://downloads.plex.tv/plex-media-server-new/1.18.4.2171-ac2afe5f8/debian/plexmediaserver_1.18.4.2171-ac2afe5f8_amd64.deb -P ~/Downloads/
+#sudo dpkg -i ~/Downloads/plexmediaserver*.deb
+#sudo systemctl enable plexmediaserver.service
+#sudo sed -i '3 s/# deb/deb/' /etc/apt/sources.list.d/plexmediaserver.list
+#wget -q https://downloads.plex.tv/plex-keys/PlexSign.key -O - | sudo apt-key add -
 
 #===========================
 #Sonar Installer
@@ -97,6 +102,12 @@ curl -L -O $( curl -s https://api.github.com/repos/Radarr/Radarr/releases | grep
 tar -xvzf Radarr.develop.*.linux.tar.gz
 
 #=====================================
+#NzGet Installer
+sudo mkdir /opt/nzbget
+wget https://nzbget.net/download/nzbget-latest-bin-linux.run -P /tmp
+chmod +x /tmp/nzbget-latest-bin-linux.run
+sudo sh /tmp/nzbget-latest-bin-linux.run --destdir /opt/nzbget
+
 
 sudo apt update
 sudo apt upgrade
@@ -140,6 +151,9 @@ Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target" > /lib/systemd/system/sonarr.service
+
+
+
 
 ###RadARR auTO#########
 echo "[Unit]
@@ -191,6 +205,25 @@ Restart=on-failure
 [Install]
 WantedBy=multi-user.target" > /lib/systemd/system/sonarr.service
 
+###Nzget#########
+echo "
+[Unit]
+Description=NZBGet
+After=network.target
+
+[Service]
+User=root
+Group=root
+Type=forking
+ExecStart=/opt/nzbget/nzbget -c /opt/nzbget/nzbget.conf -D
+ExecStop=/opt/nzbget/nzbget -Q
+ExecReload=/opt/nzbget/nzbget -O
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target" > /lib/systemd/system/nzbget.service
+
 ##RADARR AUTO###########
 echo "[Unit]
 Description=Radarr Daemon
@@ -226,14 +259,41 @@ WantedBy=multi-user.target" > /lib/systemd/system/radarr.service
 esac
 
 
-sudo systemctl enable plexmediaserver.service
-sudo systemctl start plexmediaserver.service
+#sudo systemctl enable plexmediaserver.service
+#sudo systemctl start plexmediaserver.service
 sudo systemctl enable sonarr.service
 sudo systemctl start sonarr.service
 sudo systemctl enable jackett.service
 sudo systemctl start jackett.service
 sudo systemctl enable radarr.service
 sudo systemctl start radarr.service
+sudo systemctl enable nzbget
+sudo systemctl start nzbget
+
+clear
+#Transmission installer 
+sudo apt-get install transmission-cli transmission-common transmission-daemon
+sudo systemctl stop transmission-daemon
+echo "This is Transmission set up and we need to assign the debian-transmission to a specific user "
+echo "Please enter the user here: " 
+read user
+sudo usermod -a -G debian-transmission $user
+sudo chgrp debian-transmission /media/server 
+mkdir /media/server/downloads
+sudo chgrp debian-transmission /media/server/downloads
+sudo chmod 770 /media/server
+sudo chmod 770 /media/server/downloads
+
+
+sudo systemctl start transmission-daemon 
+
+ 
+
+#Samba Installer 
+sudo apt-get install samba samba-common-bin smbclient
+
+
+
 
 clear
 read -r -p "Do you want to create desktop icons? [Y/n] " input
@@ -360,6 +420,7 @@ echo "Plex: http://localhost:32400/web"
 echo "Sonarr: http://localhost:8989"
 echo "Radarr: http://localhost:7878"
 echo "Jackett: http://localhost:9117"
+echo "NZBGET: http://192.168.1.100:6789"
 echo "Icons have been created"
 echo "You should reboot your system"
 exit 1
