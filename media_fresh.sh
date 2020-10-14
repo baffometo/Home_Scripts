@@ -10,9 +10,9 @@
 #============================================================================
 
 clear
-figlet Pi Server
+figlet -c Pi Server
 echo Welcome to Wanatux v1.0 Installer, we will just get a few things ready.
-echo This installer will convert your server to a media center manager.
+echo This installer will convert your Pi into a media center manager.
 read -r -p "Do you want to continue? [Y/n] " input 
 #Software Install Yes
 case $input in
@@ -26,27 +26,34 @@ case $input in
 		echo
 		echo
 		echo
-		sudo apt update -y && sudo apt upgrade -y
+		sudo apt update && sudo apt upgrade -y
 		clear
+		echo
 		echo "Here we need to create some folders for the server HDDs"
 		echo "It is not recommended to mount the HDDs in the default folder"
-		echo "so we will create some folders in /media but we need to change the permissions first"
-		echo "we dont want to have this folders under Root so please"
-		echo "enter your username here"
-		read user
-		echo "Now Enter group"
-		read group
-		cd /media
-		sudo mkdir server server2 Movies Cartoon TV Abigail Anime
-		sudo chown -R $user:$group /media/server /media/server2 /media/Movies /media/Cartoon /media/TV /media/Abigail /media/Anime
-
+		echo "This script can set up those folders for you"
+		read -r -p "Do you want to continue? [Y/n] " input 
+		case $input in
+			[yY][eE][sS]|[yY])
+			echo "so we will create some folders in /media but we need to change the permissions first"
+			echo "we dont want to have this folders under Root so please"
+			echo "enter your username here"
+			read user
+			echo "Now Enter group"
+			read group
+			cd /media
+			sudo mkdir server server2 Movies Cartoon TV Abigail Anime
+			sudo chown -R $user:$group /media/server /media/server2 /media/Movies /media/Cartoon /media/TV /media/Abigail /media/Anime
+				;;
+			[nN][oO]|[nN])
+		esac	
 		#Sonar Installer
 		clear
 		figlet Sonar
 		echo "We are about to install Sonarr"
 		sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 0xA236C58F409091A18ACA53CBEBFF6B99D9B78493
 		echo "deb http://apt.sonarr.tv/ master main" | sudo tee /etc/apt/sources.list.d/sonarr.list
-		sudo apt install gnupg ca-certificates
+		sudo apt install gnupg ca-certificates -y
 		sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
 		echo "deb https://download.mono-project.com/repo/ubuntu stable-bionic main" | sudo tee /etc/apt/sources.list.d/mono-official-stable.list
 
@@ -54,19 +61,23 @@ case $input in
 		clear
 		figlet Jacket
 		echo "We are about to install Jacket"
-		sudo apt update && sudo apt install curl mediainfo
+		sudo apt update && sudo apt install curl mediainfo -y
 		cd /opt
-		curl -L -O $( curl -s https://api.github.com/repos/Jackett/Jackett/releases | grep LinuxARM32.tar.gz | grep browser_download_url | head -1 | cut -d \" -f 4 )
-		tar -xvzf Jackett.Binaries.LinuxARM32.tar.gz
-		sudo /opt/Jackett/install_service_systemd.sh
+		sudo curl -L -O $( curl -s https://api.github.com/repos/Jackett/Jackett/releases | grep LinuxARM32.tar.gz | grep browser_download_url | head -1 | cut -d \" -f 4 )
+		sudo tar -xvzf Jackett.Binaries.LinuxARM32.tar.gz
+		echo "Jackett folder in /opt has to have a different owner for example pi:pi"
+		sudo chown -R $user:$group ./Jackett
+		sudo ./Jackett/install_service_systemd.sh
+		
 		#Radarr Installer
-		figlet Radarr
 		clear
+		figlet Radarr
+		
 		echo "We are about to install Radarr"
-		sudo apt update && sudo apt install curl mediainfo
+		sudo apt update && sudo apt install curl mediainfo -y
 		cd /opt
-		curl -L -O $( curl -s https://api.github.com/repos/Radarr/Radarr/releases | grep linux.tar.gz | grep browser_download_url | head -1 | cut -d \" -f 4 )
-		tar -xvzf Radarr.develop.*.linux.tar.gz
+		sudo curl -L -O $( curl -s https://api.github.com/repos/Radarr/Radarr/releases | grep linux.tar.gz | grep browser_download_url | head -1 | cut -d \" -f 4 )
+		sudo tar -xvzf Radarr.develop.*.linux.tar.gz
 		#NzGet Installer
 		clear
 		figlet NzGet
@@ -75,14 +86,14 @@ case $input in
 		wget https://nzbget.net/download/nzbget-latest-bin-linux.run -P /tmp
 		chmod +x /tmp/nzbget-latest-bin-linux.run
 		sudo sh /tmp/nzbget-latest-bin-linux.run --destdir /opt/nzbget
-		sudo apt update
-		sudo apt upgrade
-		sudo apt install nzbdrone 
-		#Transmission installer 
+		sudo apt update && sudo apt upgrade -y && sudo apt install nzbdrone 		
+		#Transmission installer
+		clear		
 		figlet Transmission
 		echo "We are about to install Transmission"
-		sudo apt-get install transmission-cli transmission-common transmission-daemon
+		sudo apt-get install transmission-cli transmission-common transmission-daemon -y
 		sudo systemctl stop transmission-daemon
+		clear
 		echo "This is Transmission set up and we need to assign the debian-transmission to a specific user "
 		echo "Please enter the user here: " 
 		read user
@@ -96,7 +107,7 @@ case $input in
 		clear
 		figlet Samba
 		echo "We are about to install Samba"
-		sudo apt-get install samba samba-common-bin smbclient
+		sudo apt-get install samba samba-common-bin smbclient -y
 		
 		#############Auto start file#####################################################
 		clear
@@ -223,7 +234,7 @@ case $input in
 		echo
 		echo
 		echo
-		sudo apt update -y && sudo apt upgrade -y && sudo apt autoremove -y
+		sudo apt update && sudo apt upgrade -y && sudo apt autoremove -y
 		clear
 		echo "Thanks for using this script"
 		echo "Here is a list o the IP Addresses"
@@ -232,15 +243,21 @@ case $input in
 		echo "Radarr: http://localhost:7878"
 		echo "Jackett: http://localhost:9117"
 		echo "NZBGET: http://localhost:6789"
-		read -r -p "Do you want to reboot now? [Y/n] " input
+		read -r -p "Do you want to export that list to a txt file?[Y/n] " input
 		case $input in
 			[yY][eE][sS]|[yY])
-			### Desktop Creation
-			sudo reboot now
+			echo "
+			Here is a list o the IP Addresses
+			Plex: http://localhost:32400/web
+			Sonarr: http://localhost:8989
+			Radarr: http://localhost:7878
+			Jackett: http://localhost:9117
+			NZBGET: http://localhost:6789" > ./IP_List.txt
 			;;
 		[nN][oO]|[nN])
 		echo "Thanks for using the script"
 		figlet Wanatux
+		exit 1
 		esac
 	;;
 	[nN][oO]|[nN])
