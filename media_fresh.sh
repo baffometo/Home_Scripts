@@ -84,7 +84,7 @@ case $input in
 		echo "We are about to install NzGet"
 		sudo mkdir /opt/nzbget
 		wget https://nzbget.net/download/nzbget-latest-bin-linux.run -P /tmp
-		chmod +x /tmp/nzbget-latest-bin-linux.run
+		sudo chmod +x /tmp/nzbget-latest-bin-linux.run
 		sudo sh /tmp/nzbget-latest-bin-linux.run --destdir /opt/nzbget
 		sudo apt update && sudo apt upgrade -y && sudo apt install nzbdrone 		
 		#Transmission installer
@@ -121,7 +121,7 @@ case $input in
 				echo "Now Enter group"
 				read group
 				#Sonarr
-				echo "[Unit]
+				sudo echo "[Unit]
 				Description=Sonarr Daemon
 				After=network.target
 
@@ -139,7 +139,7 @@ case $input in
 				WantedBy=multi-user.target" > /lib/systemd/system/sonarr.service
 
 				###RadARR auTO#########
-				echo "[Unit]
+				sudo echo "[Unit]
 				Description=Radarr Daemon
 				After=syslog.target network.target
 
@@ -158,12 +158,12 @@ case $input in
 
 				[Install]
 				WantedBy=multi-user.target" > /lib/systemd/system/radarr.service
-				sudo chown -R $user:$group /opt/Radarr 
+				sudo sudo chown -R $user:$group /opt/Radarr 
 				;;
 			[nN][oO]|[nN])
 
 				#Sonarr
-				echo "[Unit]
+				sudo echo "[Unit]
 				Description=Sonarr Daemon
 				After=network.target
 
@@ -181,7 +181,7 @@ case $input in
 				WantedBy=multi-user.target" > /lib/systemd/system/sonarr.service
 
 				###Nzget#########
-				echo "
+				sudo echo "
 				[Unit]
 				Description=NZBGet
 				After=network.target
@@ -200,7 +200,7 @@ case $input in
 				WantedBy=multi-user.target" > /lib/systemd/system/nzbget.service
 
 				##RADARR AUTO###########
-				echo "[Unit]
+				sudo echo "[Unit]
 				Description=Radarr Daemon
 				After=syslog.target network.target
 
