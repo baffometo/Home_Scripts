@@ -113,7 +113,9 @@ case $input in
 		clear
 		figlet Start on Boot
 		echo "Now we need to create the .service files for auto start for all the applications installed"
-		read -r -p "Do you want to specify username and group? [Y/n] if no is selected it  will use root for both: [Y/n] " input
+		echo "If you are using shared folders to access to media you will have to use root as the user in order to be able to write in those folders"
+		echo "Shared folders from windows are not possible to use chown"
+		read -r -p "Do you want to specify username and group? [Y/n] if no is selected it  will use root for both (Recommended): [Y/n] " input
 		case $input in
 			[yY][eE][sS]|[yY])
 				echo "Please Inser Username for Auto Run Files"
@@ -121,104 +123,104 @@ case $input in
 				echo "Now Enter group"
 				read group
 				#Sonarr
-				sudo echo "[Unit]
-				Description=Sonarr Daemon
-				After=network.target
+sudo echo "[Unit]
+Description=Sonarr Daemon
+After=network.target
 
-				[Service]
-				User=$user
-				Group=$group
+[Service]
+User=$user
+Group=$group
 
-				Type=simple
-				ExecStart=/usr/bin/mono /opt/NzbDrone/NzbDrone.exe -nobrowser
-				TimeoutStopSec=20
-				KillMode=process
-				Restart=on-failure
+Type=simple
+ExecStart=/usr/bin/mono /opt/NzbDrone/NzbDrone.exe -nobrowser
+TimeoutStopSec=20
+KillMode=process
+Restart=on-failure
 
-				[Install]
-				WantedBy=multi-user.target" > /lib/systemd/system/sonarr.service
+[Install]
+WantedBy=multi-user.target" > /lib/systemd/system/sonarr.service
 
 				###RadARR auTO#########
-				sudo echo "[Unit]
-				Description=Radarr Daemon
-				After=syslog.target network.target
+sudo echo "[Unit]
+Description=Radarr Daemon
+After=syslog.target network.target
 
-				[Service]
-				# Change the user and group variables here.
-				User=$user
-				Group=$group
+[Service]
+# Change the user and group variables here.
+User=$user
+Group=$group
 
-				Type=simple
+Type=simple
 
-				# Change the path to Radarr or mono here if it is in a different location for you.
-				ExecStart=/usr/bin/mono --debug /opt/Radarr/Radarr.exe -nobrowser
-				TimeoutStopSec=20
-				KillMode=process
-				Restart=on-failure
+# Change the path to Radarr or mono here if it is in a different location for you.
+ExecStart=/usr/bin/mono --debug /opt/Radarr/Radarr.exe -nobrowser
+TimeoutStopSec=20
+KillMode=process
+Restart=on-failure
 
-				[Install]
-				WantedBy=multi-user.target" > /lib/systemd/system/radarr.service
+[Install]
+WantedBy=multi-user.target" > /lib/systemd/system/radarr.service
 				sudo sudo chown -R $user:$group /opt/Radarr 
 				;;
 			[nN][oO]|[nN])
 
 				#Sonarr
-				sudo echo "[Unit]
-				Description=Sonarr Daemon
-				After=network.target
+sudo echo "[Unit]
+Description=Sonarr Daemon
+After=network.target
 
-				[Service]
-				User=root
-				Group=root
+[Service]
+User=root
+Group=root
 
-				Type=simple
-				ExecStart=/usr/bin/mono /opt/NzbDrone/NzbDrone.exe -nobrowser
-				TimeoutStopSec=20
-				KillMode=process
-				Restart=on-failure
+Type=simple
+ExecStart=/usr/bin/mono /opt/NzbDrone/NzbDrone.exe -nobrowser
+TimeoutStopSec=20
+KillMode=process
+Restart=on-failure
 
-				[Install]
-				WantedBy=multi-user.target" > /lib/systemd/system/sonarr.service
+[Install]
+WantedBy=multi-user.target" > /lib/systemd/system/sonarr.service
 
 				###Nzget#########
-				sudo echo "
-				[Unit]
-				Description=NZBGet
-				After=network.target
+sudo echo "
+[Unit]
+Description=NZBGet
+After=network.target
 
-				[Service]
-				User=root
-				Group=root
-				Type=forking
-				ExecStart=/opt/nzbget/nzbget -c /opt/nzbget/nzbget.conf -D
-				ExecStop=/opt/nzbget/nzbget -Q
-				ExecReload=/opt/nzbget/nzbget -O
-				KillMode=process
-				Restart=on-failure
+[Service]
+User=root
+Group=root
+Type=forking
+ExecStart=/opt/nzbget/nzbget -c /opt/nzbget/nzbget.conf -D
+ExecStop=/opt/nzbget/nzbget -Q
+ExecReload=/opt/nzbget/nzbget -O
+KillMode=process
+Restart=on-failure
 
-				[Install]
-				WantedBy=multi-user.target" > /lib/systemd/system/nzbget.service
+[Install]
+WantedBy=multi-user.target" > /lib/systemd/system/nzbget.service
 
 				##RADARR AUTO###########
-				sudo echo "[Unit]
-				Description=Radarr Daemon
-				After=syslog.target network.target
+sudo echo "[Unit]
+Description=Radarr Daemon
+After=syslog.target network.target
 
-				[Service]
-				# Change the user and group variables here.
-				User=root
-				Group=root
+[Service]
+# Change the user and group variables here.
+User=root
+Group=root
 
-				Type=simple
+Type=simple
 
-				# Change the path to Radarr or mono here if it is in a different location for you.
-				ExecStart=/usr/bin/mono --debug /opt/Radarr/Radarr.exe -nobrowser
-				TimeoutStopSec=20
-				KillMode=process
-				Restart=on-failure
+# Change the path to Radarr or mono here if it is in a different location for you.
+ExecStart=/usr/bin/mono --debug /opt/Radarr/Radarr.exe -nobrowser
+TimeoutStopSec=20
+KillMode=process
+Restart=on-failure
 
-				[Install]
-				WantedBy=multi-user.target" > /lib/systemd/system/radarr.service
+[Install]
+WantedBy=multi-user.target" > /lib/systemd/system/radarr.service
 			;;
 			esac
 		#Start Systemctl Files
